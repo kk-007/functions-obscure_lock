@@ -5,7 +5,7 @@ var request = require('request');
 admin.initializeApp();
 
 app.get('/getStatus', async (req, res) => {
-	res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Origin', '*');
 
     if (req.method === 'OPTIONS') {
         // Send response to OPTIONS requests
@@ -23,9 +23,72 @@ app.get('/getStatus', async (req, res) => {
     }
 });
 
+app.get('/getData', async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    if (req.method === 'OPTIONS') {
+        // Send response to OPTIONS requests
+        res.set('Access-Control-Allow-Methods', 'GET');
+        res.set('Access-Control-Allow-Headers', 'Content-Type');
+        res.set('Access-Control-Max-Age', '3600');
+        res.status(204).send('');
+    } else {
+        const db = admin.firestore();
+        let res_data=[];
+        let querySnapshot = await db.collection("block_data").get()
+        querySnapshot.forEach(function(doc) {
+            //console.log(doc.id, " => ", doc.data());
+            res_data.push(doc.data());
+        });
+        res.send(res_data);
+    }
+});
+
+
+app.get('/logInCheck', async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    if (req.method === 'OPTIONS') {
+        // Send response to OPTIONS requests
+        res.set('Access-Control-Allow-Methods', 'GET');
+        res.set('Access-Control-Allow-Headers', 'Content-Type');
+        res.set('Access-Control-Max-Age', '3600');
+        res.status(204).send('');
+    } else {
+        let id = req.query.uid;
+        let pass = req.query.upass;
+        const db = admin.firestore();
+        let locker = db.collection('user').doc(id).get();
+        let doc = await locker;
+        let obj = doc.data();
+        if(obj && obj.pass === pass){
+            res.send(true);    
+        }
+        res.send(false);
+    }
+});
+
+app.get('/lalaWeight', async (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+
+    if (req.method === 'OPTIONS') {
+        // Send response to OPTIONS requests
+        res.set('Access-Control-Allow-Methods', 'GET');
+        res.set('Access-Control-Allow-Headers', 'Content-Type');
+        res.set('Access-Control-Max-Age', '3600');
+        res.status(204).send('');
+    } else {
+        let locker_id =  req.query.id;
+        const db = admin.firestore();
+        let locker = db.collection('locker').doc(locker_id).get();
+        let doc = await locker;
+        let obj = doc.data();
+        res.send(obj.lala);
+    }
+});
 
 app.get('/getPass', async (req, res) => {
-	res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Origin', '*');
 
     if (req.method === 'OPTIONS') {
         // Send response to OPTIONS requests
@@ -44,7 +107,7 @@ app.get('/getPass', async (req, res) => {
 });
 
 app.get('/getFlag', async (req, res) => {
-	res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Origin', '*');
 
     if (req.method === 'OPTIONS') {
         // Send response to OPTIONS requests
@@ -63,7 +126,7 @@ app.get('/getFlag', async (req, res) => {
 });
 
 app.get('/openLocker', async (req, res) => {
-	res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Origin', '*');
 
     if (req.method === 'OPTIONS') {
         // Send response to OPTIONS requests
@@ -88,7 +151,7 @@ app.get('/openLocker', async (req, res) => {
 });
 
 app.get('/closeLocker', async (req, res) => {
-	res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Origin', '*');
 
     if (req.method === 'OPTIONS') {
         // Send response to OPTIONS requests
@@ -114,7 +177,7 @@ app.get('/closeLocker', async (req, res) => {
 
 
 app.get('/doTransaction', async (req, res) => {
-	res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Origin', '*');
 
     if (req.method === 'OPTIONS') {
         // Send response to OPTIONS requests
@@ -172,7 +235,7 @@ app.get('/doTransaction', async (req, res) => {
 });
 
 app.get('/testApi', async (req, res) => {
-	res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Origin', '*');
 
     if (req.method === 'OPTIONS') {
         // Send response to OPTIONS requests
